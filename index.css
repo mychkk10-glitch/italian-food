@@ -1,0 +1,201 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------
+   テーマ（ライト/ダーク）
+------------------------------------------------------------ */
+:root {
+  --paper: #faf7f2;
+  --card: #ffffff;
+  --ink: #1c1917;
+  --muted: #78716c;
+  --line: #e7e1d8;
+  --accent: #c2410c;
+  --accent-ink: #ffffff;
+  --accent-soft: #fdebdd;
+  --olive: #4d7c0f;
+  --olive-soft: #ecf3dc;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --paper: #151311;
+    --card: #211e1b;
+    --ink: #f5f1ea;
+    --muted: #a8a29e;
+    --line: #34302b;
+    --accent: #f97316;
+    --accent-ink: #1a0f06;
+    --accent-soft: #3a2415;
+    --olive: #a3c95a;
+    --olive-soft: #26301a;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+
+  --paper: #151311;
+  --card: #211e1b;
+  --ink: #f5f1ea;
+  --muted: #a8a29e;
+  --line: #34302b;
+  --accent: #f97316;
+  --accent-ink: #1a0f06;
+  --accent-soft: #3a2415;
+  --olive: #a3c95a;
+  --olive-soft: #26301a;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-olive: var(--olive);
+  --color-olive-soft: var(--olive-soft);
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN',
+    'Noto Sans JP', system-ui, sans-serif;
+  --font-serif: ui-serif, 'New York', 'Iowan Old Style', Georgia, 'Hiragino Mincho ProN', serif;
+}
+
+/* ------------------------------------------------------------
+   iOS Safari 向けのベース
+------------------------------------------------------------ */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--paper);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+button {
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation; /* ダブルタップズームによる遅延を防ぐ */
+}
+
+img {
+  -webkit-user-drag: none;
+}
+
+/* Safe Area（ノッチ / Dynamic Island / ホームインジケータ） */
+.pt-safe {
+  padding-top: calc(env(safe-area-inset-top, 0px) + 12px);
+}
+.pb-safe {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
+}
+.top-safe {
+  top: calc(env(safe-area-inset-top, 0px) + 10px);
+}
+.px-safe {
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+}
+
+/* 押したときの iOS らしい縮み */
+.pressable {
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+.pressable:active {
+  transform: scale(0.97);
+  opacity: 0.9;
+}
+
+/* 画面遷移 */
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.screen-in {
+  animation: screen-in 280ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+.shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes scan {
+  0% {
+    top: 8%;
+  }
+  50% {
+    top: 88%;
+  }
+  100% {
+    top: 8%;
+  }
+}
+.scan-line {
+  animation: scan 2.2s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.45;
+  }
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+.pulse-ring {
+  animation: pulse-ring 2.4s ease-out infinite;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screen-in,
+  .scan-line,
+  .pulse-ring,
+  .shimmer::after {
+    animation: none;
+  }
+}
